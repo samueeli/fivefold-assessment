@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Fivefold Assessment</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f2f6fa;
+        color: #193345;
+        font:
+          17px/1.6 system-ui,
+          sans-serif;
+      }
+      main {
+        max-width: 720px;
+        margin: auto;
+        padding: 42px 24px;
+      }
+      header {
+        font-size: 14px;
+        letter-spacing: 0.13em;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #497086;
+        margin-bottom: 44px;
+      }
+      h1 {
+        font-size: clamp(27px, 5vw, 36px);
+        line-height: 1.2;
+        margin: 0 0 12px;
+        letter-spacing: -0.03em;
+      }
+      p {
+        color: #526977;
+        margin: 0 0 28px;
+      }
+      .progress {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+      }
+      .track {
+        height: 6px;
+        background: #dae3ed;
+        border-radius: 6px;
+        overflow: hidden;
+        margin: 10px 0 30px;
+      }
+      .fill {
+        height: 100%;
+        background: #147c91;
+      }
+      fieldset {
+        border: 0;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 16px;
+      }
+      legend {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+      }
+      label {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 26px 24px;
+        background: white;
+        border: 2px solid #dce5ed;
+        border-radius: 14px;
+        cursor: pointer;
+        min-height: 112px;
+        font-size: 18px;
+      }
+      label:hover {
+        border-color: #7696aa;
+      }
+      label:has(input:checked) {
+        background: #e9f5f7;
+        border-color: #147c91;
+      }
+      label:focus-within,
+      button:focus-visible {
+        outline: 3px solid #8fb7e6;
+        outline-offset: 3px;
+      }
+      input {
+        width: 21px;
+        height: 21px;
+        flex: none;
+        margin: 0;
+        accent-color: #147c91;
+      }
+      .actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 30px;
+      }
+      button {
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+        border: 0;
+        border-radius: 9px;
+        padding: 13px 22px;
+        background: #153f55;
+        color: white;
+        min-height: 50px;
+      }
+      button:hover {
+        background: #215c75;
+      }
+      button:disabled {
+        opacity: 0.35;
+        cursor: default;
+      }
+      .secondary {
+        background: transparent;
+        color: #526977;
+      }
+      .secondary:hover {
+        background: #e4ebf1;
+      }
+      footer {
+        color: #748591;
+        font-size: 12px;
+        margin-top: 60px;
+      }
+      .summary {
+        background: #153f55;
+        color: white;
+        padding: 28px;
+        border-radius: 14px;
+        margin: 28px 0;
+      }
+      .summary p {
+        color: white;
+        margin: 0 0 16px;
+      }
+      .summary p:last-child {
+        margin: 0;
+      }
+      .summary small {
+        display: block;
+        font-size: 14px;
+        color: #b8d5e2;
+      }
+      .summary strong {
+        font-size: 24px;
+      }
+      .row {
+        margin: 22px 0;
+      }
+      .row .progress {
+        font-size: 17px;
+      }
+      .row .track {
+        height: 12px;
+        margin: 8px 0;
+      }
+      .note {
+        font-size: 14px;
+      }
+      @media (max-width: 480px) {
+        main {
+          padding: 28px 18px;
+        }
+        header {
+          margin-bottom: 32px;
+        }
+        label {
+          font-size: 17px;
+          padding: 22px 18px;
+        }
+        footer {
+          margin-top: 40px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>Fivefold / Assessment</header>
+      <div id="app"></div>
+      <footer>
+        The Fivefold Gift Assessment Profile © 2017 Mark Tubbs. Co-authored with David Collins.
+      </footer>
+    </main>
+    <script>
+      const questions = [
+        [
+          ['I seek to align myself with apostolic leaders and movements', 0],
+          ['I like to walk out problems with people', 3],
+        ],
+        [
+          ['I ask God specific questions to get specific answers', 1],
+          ['I like to articulate truth and make it practical for people to understand', 4],
+        ],
+        [
+          ['I want to know if someone is saved or not', 2],
+          ['I expect people to mature and grow', 0],
+        ],
+        [
+          ['People regularly seek me out for counsel and support', 3],
+          ['I like to be as accurate as possible in all I do', 4],
+        ],
+        [
+          ['I write down visions and dreams on a regular basis', 1],
+          ['I think about different approaches to sharing the gospel with others', 2],
+        ],
+        [
+          ['I am told I have a lot of discernment of the spiritual things', 1],
+          ['Being biblical is essential in the way I live my life', 4],
+        ],
+        [
+          ['I believe unity is the main way to make a difference', 0],
+          ['I believe hearing God and knowing his will is the way to make a difference', 1],
+        ],
+        [
+          ['I tend to see things as either black or white', 4],
+          ['I have the ability to keep the big picture in the forefront', 0],
+        ],
+        [
+          ['I tend to be truth centered', 4],
+          ['I have a heart for the lost and pray about this often', 2],
+        ],
+        [
+          ['I like to help people mature and make equipping a priority', 0],
+          ["I love to heal and minister to people's hearts", 3],
+        ],
+        [
+          ['I have wept for the lost on occasion', 2],
+          ['I like to equip others to grow and increase', 0],
+        ],
+        [
+          ['I love to listen and ask people questions', 3],
+          ['I like to help people hear God for themselves', 1],
+        ],
+        [
+          ['Bringing people into their destiny is the most important thing there is', 0],
+          ['Loving people is the most important thing there is', 3],
+        ],
+        [
+          ['I seek to hear God for others regurlarly', 1],
+          ["I don't want to be judgmental, but people have to be honest with themselves", 4],
+        ],
+        [
+          ['I often pray for miracles and see people healed', 0],
+          ['I am passionate about keeping people accountable and in the truth', 4],
+        ],
+        [
+          ['I have an inquisitive mind when I am studying', 4],
+          ['I often hear and see things for others when I pray', 1],
+        ],
+        [
+          ['People tell me that I am very patient and caring', 3],
+          ['I love to reach out on the street and other non-church settings', 2],
+        ],
+        [
+          ['I like to network and bridge people', 0],
+          ['I assist people to interpret dreams and visions', 1],
+        ],
+        [
+          ['I like to learn everything I can about a topic', 4],
+          ['I am a peace-maker and show people how to forgive', 3],
+        ],
+        [
+          ['I love to comfort and encourage people', 3],
+          ['I am consistent in praying for the lost', 2],
+        ],
+        [
+          ['I often give personal words to encourage others', 1],
+          ['I carry people in my heart even if I met them only once', 3],
+        ],
+        [
+          ['I love the gospel and share it every time I can', 2],
+          ['I focus on people groups and think of strategies to reach them', 0],
+        ],
+        [
+          ['I see people in sin and think immediately, “they just need Jesus.”', 2],
+          ['I am very quick to feel compassion even if it is a movie character!', 3],
+        ],
+        [
+          ['I articulate declarations from the Spirit and declare them over people and groups', 1],
+          ['I love to share anything that is important to me with everyone', 2],
+        ],
+        [
+          ["I notice when people aren't at meetings or events and pray for their well-being", 3],
+          ['I am very aware of the connection between the natural and spiritual realms', 1],
+        ],
+        [
+          ['I focus on foundational truths and principles', 4],
+          ['I like to meet new people and be in new situations', 2],
+        ],
+        [
+          ['I like to start new things and recruit others to assist me', 0],
+          ['Having daily fresh revelation is important to me', 1],
+        ],
+        [
+          ['I eagerly share my faith when the occasion arises', 2],
+          ['I like to put things into order and clarity', 4],
+        ],
+        [
+          ['People come to me for support and help', 3],
+          ['I like to train others and see them released', 0],
+        ],
+        [
+          ['I help people stay truthful to their stated purpose', 4],
+          ['I invite people to come with me to church or other settings', 2],
+        ],
+      ];
+    </script>
+    <script>
+      const app = document.getElementById('app'),
+        names = ['Apostolic', 'Prophetic', 'Evangelistic', 'Pastoral', 'Teacher'];
+      let answers = Array(30).fill(null),
+        step = 0;
+      function focusHeading() {
+        const h = app.querySelector('h1');
+        h.tabIndex = -1;
+        h.focus({ preventScroll: true });
+        window.scrollTo(0, 0);
+      }
+      function render() {
+        const count = answers.filter((a) => a !== null).length;
+        app.innerHTML = `<h1>Which feels more like you?</h1><p>Choose the statement that better reflects your preferences.</p><div class="progress"><span>Assessment</span><span>${step + 1}/30</span></div><div class="track" role="progressbar" aria-label="Questions answered" aria-valuemin="0" aria-valuemax="30" aria-valuenow="${count}"><div class="fill" style="width:${(count / 30) * 100}%"></div></div><fieldset><legend>Choose one statement</legend>${questions[step].map((q, i) => `<label><input type="radio" name="statement" value="${i}" ${answers[step] === i ? 'checked' : ''}><span>${q[0]}</span></label>`).join('')}</fieldset><div class="actions"><button class="secondary" id="back" ${step === 0 ? 'disabled' : ''}>Back</button><button id="next" ${answers[step] === null ? 'disabled' : ''}>${step === 29 ? 'Show assessment' : 'Next'}</button></div>`;
+        app.querySelectorAll('input').forEach(
+          (el) =>
+            (el.onchange = () => {
+              answers[step] = Number(el.value);
+              document.getElementById('next').disabled = false;
+              const count = answers.filter((a) => a !== null).length;
+              app.querySelector('.fill').style.width = (count / 30) * 100 + '%';
+              app.querySelector('[role=progressbar]').setAttribute('aria-valuenow', count);
+            }),
+        );
+        document.getElementById('back').onclick = () => {
+          if (step > 0) {
+            step--;
+            render();
+            focusHeading();
+          }
+        };
+        document.getElementById('next').onclick = () => {
+          if (answers[step] === null) return;
+          if (step === 29) showResults();
+          else {
+            step++;
+            render();
+            focusHeading();
+          }
+        };
+      }
+      function scores() {
+        const s = Array(5).fill(0);
+        answers.forEach((a, i) => {
+          if (a !== null) s[questions[i][a][1]]++;
+        });
+        return s;
+      }
+      function showResults() {
+        if (!answers.every((a) => a !== null)) return;
+        const s = scores(),
+          levels = [...new Set(s)].sort((a, b) => b - a),
+          primary = names.filter((_, i) => s[i] === levels[0]),
+          secondary = names.filter((_, i) => s[i] === levels[1]);
+        app.innerHTML = `<h1>Your assessment</h1><p>30/30 completed · 30 points in total</p><div class="summary"><p><small>${primary.length > 1 ? 'Joint highest scores' : 'Primary gift'}</small><strong>${primary.join(' & ')}</strong></p>${secondary.length ? `<p><small>${primary.length > 1 ? 'Next highest score' : secondary.length > 1 ? 'Joint secondary gifts' : 'Secondary gift'}</small><strong>${secondary.join(' & ')}</strong></p>` : ''}</div>${names.map((n, i) => `<div class="row"><div class="progress"><span>${n}</span><strong>${s[i]} / 12</strong></div><div class="track"><div class="fill" style="width:${(s[i] / 12) * 100}%"></div></div></div>`).join('')}<p class="note">${primary.length > 1 ? 'Your highest scores are tied; this assessment does not identify a single primary gift. ' : ''}These scores reflect the preferences you selected.</p><div class="actions"><button class="secondary" id="review">Review answers</button><button id="restart">Start again</button></div>`;
+        document.getElementById('review').onclick = () => {
+          step = 29;
+          render();
+          focusHeading();
+        };
+        document.getElementById('restart').onclick = reset;
+        focusHeading();
+      }
+      function reset() {
+        answers = Array(30).fill(null);
+        step = 0;
+        render();
+        focusHeading();
+      }
+      window.addEventListener('pagehide', () => {
+        answers = Array(30).fill(null);
+        step = 0;
+      });
+      window.addEventListener('pageshow', (e) => {
+        if (e.persisted) reset();
+      });
+      render();
+    </script>
+  </body>
+</html>
